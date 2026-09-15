@@ -1,0 +1,38 @@
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+
+    ports:
+      - "8080:80"
+
+    environment:
+      DB_HOST: db
+      DB_NAME: helpdesk_prefeitura
+      DB_USER: helpdesk
+      DB_PASSWORD: helpdesk_senha
+      DB_PORT: 3306
+
+    depends_on:
+      - db
+
+    volumes:
+      - .:/var/www/html
+
+  db:
+    image: mariadb:10.6
+
+    environment:
+      MYSQL_DATABASE: helpdesk_prefeitura
+      MYSQL_USER: helpdesk
+      MYSQL_PASSWORD: helpdesk_senha
+      MYSQL_ROOT_PASSWORD: root_senha
+
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./helpdesk_prefeitura.sql:/docker-entrypoint-initdb.d/helpdesk_prefeitura.sql
+
+volumes:
+  db_data:
