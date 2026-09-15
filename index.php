@@ -7,6 +7,6 @@ session_start();
 
 
 
-header("Location: /helpdesk_prefeitura/account/login.php");
+//header("Location: /helpdesk_prefeitura/account/login.php");
 //header("Location: /account/login.php");
 exit;
