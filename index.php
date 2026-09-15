@@ -4,9 +4,6 @@
 
 session_start();
 
-
-
-
-//header("Location: /helpdesk_prefeitura/account/login.php");
-//header("Location: /account/login.php");
+// Redirecionamento correto para produção na nuvem (sem a subpasta do XAMPP)
+header("Location: /account/login.php");
 exit;
