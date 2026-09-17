@@ -6,6 +6,9 @@ RUN docker-php-ext-install pdo pdo_mysql
 # Habilita mod_rewrite do Apache
 RUN a2enmod rewrite
 
+# CONFIGURAÇÃO CRUCIAL: Passa as variáveis do Render para o ambiente do PHP
+RUN echo "PassEnv DB_HOST DB_NAME DB_USER DB_PASSWORD DB_PORT" >> /etc/apache2/apache2.conf
+
 # Configura o Apache para permitir .htaccess na raiz do servidor
 RUN printf '<Directory /var/www/html>\n\
     AllowOverride All\n\
