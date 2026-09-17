@@ -9,7 +9,7 @@
             <div class="card-body">
                 <h5 class="card-title">Técnicos</h5>
                 <p class="card-text">Cadastrar e gerenciar equipe de suporte de TI.</p>
-                <a href="/helpdesk_prefeitura/admin/gerenciar_tecnicos.php" class="btn btn-danger btn-sm">Gerenciar Técnicos</a>
+                <a href="/admin/gerenciar_tecnicos.php" class="btn btn-danger btn-sm">Gerenciar Técnicos</a>
             </div>
         </div>
     </div>
@@ -18,7 +18,7 @@
             <div class="card-body">
                 <h5 class="card-title">Setores & Secretarias</h5>
                 <p class="card-text">Cadastrar novos setores da prefeitura.</p>
-                <a href="/helpdesk_prefeitura/admin/gerenciar_setores.php" class="btn btn-danger btn-sm">Gerenciar Setores</a>
+                <a href="/admin/gerenciar_setores.php" class="btn btn-danger btn-sm">Gerenciar Setores</a>
             </div>
         </div>
     </div>
@@ -27,7 +27,7 @@
             <div class="card-body">
                 <h5 class="card-title">Relatórios</h5>
                 <p class="card-text">Visualizar métricas e total de chamados.</p>
-                <a href="/helpdesk_prefeitura/includes/relatorios.php" class="btn btn-danger btn-sm">Ver Relatórios</a>
+                <a href="/includes/relatorios.php" class="btn btn-danger btn-sm">Ver Relatórios</a>
             </div>
         </div>
     </div>

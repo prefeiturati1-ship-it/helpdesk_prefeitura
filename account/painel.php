@@ -27,8 +27,8 @@ $nome   = $_SESSION['usuario_nome'];
             <span class="me-3">Olá, <strong><?= htmlspecialchars($nome) ?></strong> 
                 <span class="badge bg-secondary"><?= strtoupper($perfil) ?></span>
             </span>
-            <a href="/helpdesk_prefeitura/perfil.php" class="btn btn-outline-info btn-sm me-2">Meu Perfil</a>
-            <a href="/helpdesk_prefeitura/account/logout.php" class="btn btn-outline-danger btn-sm">Sair</a>
+            <a href="/perfil.php" class="btn btn-outline-info btn-sm me-2">Meu Perfil</a>
+            <a href="/account/logout.php" class="btn btn-outline-danger btn-sm">Sair</a>
         </div>
     </div>
 </nav>
