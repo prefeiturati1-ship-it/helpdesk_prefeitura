@@ -36,7 +36,7 @@
             <div class="card-body">
                 <h5 class="card-title">Fila de chamados</h5>
                 <p class="card-text">Veja os chamados</p>
-             <a href="/helpdesk_prefeitura/suporte/fila_chamados.php" class="btn btn-danger btn-sm">Atender Chamados</a>
+             <a href="/suporte/fila_chamados.php" class="btn btn-danger btn-sm">Atender Chamados</a>
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
             <div class="card-body">
                 <h5 class="card-title">Cadastrar Usuários</h5>
                 <p class="card-text">Se precisar cadastre que vai usar o sistema.</p>
-             <a href="/helpdesk_prefeitura/suporte/cadastro_usuario.php" class="btn btn-danger btn-sm">cadastrar usuarios</a>
+             <a href="/suporte/cadastro_usuario.php" class="btn btn-danger btn-sm">cadastrar usuarios</a>
             </div>
         </div>
     </div>
@@ -54,7 +54,7 @@
             <div class="card-body">
                 <h5 class="card-title">Cadastrar Problemas</h5>
                 <p class="card-text">Cadastre possíveis problemas.</p>
-             <a href="/helpdesk_prefeitura/suporte/cadastro_problemas.php" class="btn btn-danger btn-sm">cadastrar Problemas</a>
+             <a href="/suporte/cadastro_problemas.php" class="btn btn-danger btn-sm">cadastrar Problemas</a>
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
             <div class="card-body">
                 <h5 class="card-title">Verinha</h5>
                 <p class="card-text">Moniore computadores com a verinha</p>
-             <a href="/helpdesk_prefeitura/admin/dispositivos.php" class="btn btn-danger btn-sm">Acesse a verinha</a>
+             <a href="/admin/dispositivos.php" class="btn btn-danger btn-sm">Acesse a verinha</a>
             </div>
         </div>
     </div>
@@ -72,7 +72,7 @@
             <div class="card-body">
                 <h5 class="card-title">historico de Pcs</h5>
                 <p class="card-text">Veja os historicos e o que foi apagado e alterado</p>
-             <a href="/helpdesk_prefeitura/suporte/historicos_pcs.php" class="btn btn-danger btn-sm">Acesse o Historico</a>
+             <a href="/suporte/historicos_pcs.php" class="btn btn-danger btn-sm">Acesse o Historico</a>
             </div>
         </div>
     </div>
@@ -81,7 +81,7 @@
             <div class="card-body">
                 <h5 class="card-title">Casdastrar chamados </h5>
                 <p class="card-text">Cadastre chamados </p>
-             <a href="/helpdesk_prefeitura/suporte/cadastro_chamados.php" class="btn btn-danger btn-sm">Acesse o Casdastro</a>
+             <a href="/suporte/cadastro_chamados.php" class="btn btn-danger btn-sm">Acesse o Casdastro</a>
             </div>
         </div>
     </div>
