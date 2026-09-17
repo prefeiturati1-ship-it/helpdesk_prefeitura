@@ -1,51 +1,117 @@
 <?php
 // config/conexao.php
 
-// 1. FUNÇÃO PARA CARREGAR AS VARIÁVEIS DO ARQUIVO .ENV (Apenas para o XAMPP local)
+/**
+ * Carrega variáveis de um arquivo .env (usado apenas no ambiente local/XAMPP).
+ * No Render as variáveis vêm do painel Environment, então este arquivo não existe lá.
+ */
 function carregarEnv($caminho) {
-    if (!file_exists($caminho)) return false;
-    $linhas = file($caminho, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($linhas as $linha) {
-        if (strpos(trim($linha), '#') === 0) continue;
-        if (strpos($linha, '=') !== false) {
-            list($nome, $valor) = explode('=', $linha, 2);
-            $nome = trim($nome);
-            $valor = trim($valor);
-            putenv("$nome=$valor");
-            $_ENV[$nome] = $valor;
-            $_SERVER[$nome] = $valor;
-        }
+    if (!file_exists($caminho)) {
+        return false;
     }
+
+    $linhas = file($caminho, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+    foreach ($linhas as $linha) {
+        $linha = trim($linha);
+
+        // Ignora comentários
+        if ($linha === '' || strpos($linha, '#') === 0) {
+            continue;
+        }
+
+        if (strpos($linha, '=') === false) {
+            continue;
+        }
+
+        list($nome, $valor) = explode('=', $linha, 2);
+        $nome  = trim($nome);
+        $valor = trim($valor);
+
+        // Remove aspas simples ou duplas em volta do valor, se houver
+        $valor = trim($valor, "\"'");
+
+        putenv("$nome=$valor");
+        $_ENV[$nome]    = $valor;
+        $_SERVER[$nome] = $valor;
+    }
+
+    return true;
 }
 
-// Tenta carregar o arquivo .env se ele existir (Rodando no seu PC)
 carregarEnv(__DIR__ . '/../.env');
 
-// 2. LEITURA MÚLTIPLA DAS VARIÁVEIS (Garante compatibilidade com o Render)
-$host = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? ($_SERVER['DB_HOST'] ?? ''));
-$db   = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? ($_SERVER['DB_NAME'] ?? 'defaultdb'));
-$user = getenv('DB_USER') ?: ($_ENV['DB_USER'] ?? ($_SERVER['DB_USER'] ?? 'avnadmin'));
-$pass = getenv('DB_PASSWORD') ?: ($_ENV['DB_PASSWORD'] ?? ($_SERVER['DB_PASSWORD'] ?? ''));
-$port = getenv('DB_PORT') ?: ($_ENV['DB_PORT'] ?? ($_SERVER['DB_PORT'] ?? '20521'));
+/**
+ * Lê uma variável de ambiente tentando as três fontes possíveis.
+ */
+function env($chave, $padrao = null) {
+    $valor = getenv($chave);
 
-// Caso o Render não repasse as variáveis para o PHP de jeito nenhum, usamos o seu Host fixo como última salvação:
-if (empty($host)) {
-    $host = '://aivencloud.com';
+    if ($valor === false || $valor === '') {
+        $valor = $_ENV[$chave] ?? ($_SERVER[$chave] ?? null);
+    }
+
+    if ($valor === null || $valor === '') {
+        return $padrao;
+    }
+
+    return trim($valor);
+}
+
+// ---------------------------------------------------------------------------
+// Credenciais
+// ---------------------------------------------------------------------------
+
+$host = env('DB_HOST', 'mysql-a42a1b4-prefeiturati1-756f.d.aivencloud.com');
+$db   = env('DB_NAME', 'defaultdb');
+$user = env('DB_USER', 'avnadmin');
+$pass = env('DB_PASSWORD');
+$port = env('DB_PORT', '20521');
+
+// A senha nunca tem valor padrão: precisa vir do ambiente.
+if (empty($pass)) {
+    die('Erro de configuração: a variável DB_PASSWORD não foi definida no ambiente.');
 }
 
 $charset = 'utf8mb4';
-$dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
+$dsn = "mysql:host={$host};port={$port};dbname={$db};charset={$charset}";
+
+// ---------------------------------------------------------------------------
+// Opções do PDO
+// ---------------------------------------------------------------------------
 
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     PDO::ATTR_EMULATE_PREPARES   => false,
-    // Permite a conexão segura SSL obrigatória da Aiven
-    PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
+    PDO::ATTR_TIMEOUT            => 10,
 ];
+
+// A Aiven exige conexão TLS. Se o certificado da CA estiver presente, usamos ele.
+$caminhoCa = __DIR__ . '/ca.pem';
+
+if (file_exists($caminhoCa)) {
+    $options[PDO::MYSQL_ATTR_SSL_CA] = $caminhoCa;
+}
+
+// Desliga a checagem do nome no certificado (o host da Aiven costuma divergir).
+$options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
+
+// ---------------------------------------------------------------------------
+// Conexão
+// ---------------------------------------------------------------------------
 
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-    die("Erro ao conectar com o banco de dados: " . $e->getMessage());
+} catch (PDOException $e) {
+    // Em produção, não exponha a mensagem crua para o usuário final.
+    error_log('Falha na conexão com o banco: ' . $e->getMessage());
+
+    $exibirDetalhes = env('APP_DEBUG') === 'true';
+
+    if ($exibirDetalhes) {
+        die('Erro ao conectar com o banco de dados: ' . $e->getMessage());
+    }
+
+    die('Não foi possível conectar ao banco de dados. Tente novamente em alguns instantes.');
 }
