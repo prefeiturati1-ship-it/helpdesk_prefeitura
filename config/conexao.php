@@ -1,6 +1,6 @@
 <?php
 // config/conexao.php
-
+error_log('DB_HOST recebido: [' . getenv('DB_HOST') . ']');
 /**
  * Carrega variáveis de um arquivo .env (usado apenas no ambiente local/XAMPP).
  * No Render as variáveis vêm do painel Environment, então este arquivo não existe lá.
